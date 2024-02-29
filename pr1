@@ -1,0 +1,185 @@
+1
+ <div id="app1">
+    <h1>task1 </h1>
+      <!--Разработайте сценарий для веб-страницы, который по введенному
+числу определяет, к какой группе оно относится: простые, четные, нечетные
+и добавляет это число в соответствующую группу (список).-->
+<p>введите число</p>
+<input type="number" id="inputNum">
+<button type="submit" id="butNum">click</button>
+
+<ul id="simpleNum">
+  <li>простые числа:</li>
+</ul>
+
+<ul id="honestNum">
+  <li>четные числа:</li>
+</ul>
+
+<ul id="oddNum">
+  <li>нечетные числа:</li>
+</ul>
+      <script type="module" src="/src/first.ts"></script>
+    </div>
+
+import './style.css';
+let inputNum= document.getElementById('inputNum') as HTMLInputElement;
+let button = document.getElementById('butNum') as HTMLButtonElement;
+let simpleNum= document.getElementById('simpleNum') as HTMLUListElement;
+let honestNum= document.getElementById('honestNum') as HTMLUListElement;
+let oddNum= document.getElementById('oddNum') as HTMLUListElement;
+//какой тип числа
+let getNumType=(num: number): string =>
+{
+    if (num<= 1) 
+    {
+        return 'не является простым числом';
+      }
+    
+      for (let i = 2; i <= Math.sqrt(num); i++) 
+      {
+        if (num% i === 0) 
+        {
+          return 'не является простым числом';
+        }
+}
+return 'является простым числом';
+
+};
+//добавляет в список
+let addList=(num: number, list:HTMLUListElement)=>
+{
+    let newListItem = document.createElement('li');
+    newListItem.textContent = num.toString();
+    list.appendChild(newListItem);
+
+};
+
+//обработка ввода числа
+let handleNum = (event: Event) => 
+{
+    event.preventDefault();
+    let num = parseInt(inputNum.value);
+// является ли число простым
+let simple = getNumType(num) === 'является простым числом';
+ //является ли число четным или нечетным
+ let honest = num % 2 === 0;
+
+ if (simple) 
+ {
+    addList(num, simpleNum);
+  }
+
+  if (honest) 
+  {
+    addList(num, honestNum);
+  } 
+  else 
+  {
+    addList(num, oddNum);
+  }
+   // очистка ввода
+   inputNum.value = '';
+};
+ 
+
+button.addEventListener('click', handleNum);
+
+
+2
+ <div id="app2">
+         <!--Разработайте сценарий для веб-страницы, который подсчитывает
+число одинаковых слов, встречающихся в текстовом поле веб-страницы..-->
+<h1>task2 </h1>
+<p>введите строку</p>
+<input type="text" id="inp">
+<button type="submit" id="but">click</button>
+<p id="total"></p>
+      <script type="module" src="/src/second.ts"></script>
+    </div>
+
+    import './style.css';
+let inp= document.getElementById('inp') as HTMLTextAreaElement;
+let total= document.getElementById('total') as HTMLTextAreaElement;
+let button = document.getElementById('but') as HTMLButtonElement;
+//объект будет содержать определенные ключи и значения определенного типа.
+let wordStr=(str:string): Record<string, number> => 
+{
+    let words =str.split(' ');
+    let wordCount: Record<string, number> = {};//хранит в себе одинаковые слова
+    for(let word of words)
+    {
+        //нижний регистр
+        let lowerCaseWord = word.toLowerCase();
+        //если есть плюсуем
+    if (wordCount[lowerCaseWord]) 
+      {
+        wordCount[lowerCaseWord]++;
+      } 
+      else
+       {
+        // нет, значит нет
+        wordCount[lowerCaseWord] = 1;
+      }
+    }
+    return wordCount;
+};
+
+let addWordCountToList = (word: string, count: number, list: HTMLTextAreaElement) => 
+{
+    list.textContent += `${word}: ${count}\n`;
+  };
+  
+  // обработка текста
+  let handleTxt = (event: Event) => 
+  {
+    event.preventDefault();
+    //текст из поля ввода
+    let text = inp.value;
+  //кол-во одинаковых слов в тексте
+    let wordCounts = wordStr(text);
+  
+    // Очищаем список слов и их количества
+    total.textContent = 'слова и их количество:\n';
+  
+    // Добавляем слова и их количество в список
+    for (let [word, count] of Object.entries(wordCounts)) 
+    {
+      addWordCountToList(word, count, total);
+    }
+  
+    // Очищаем поле ввода
+    inp.value = '';
+  };
+  button.addEventListener('click', handleTxt);  
+
+
+3
+
+
+  4
+   <div id="app3">
+         <!--Разработайте сценарий для веб-страницы, который сможет по
+нажатию на соответствующую кнопку добавлять часто употребляемые слова,
+например: добрый день, спасибо, пожалуйста, к сожалению, и т.д.-->
+<h1>task3</h1>
+<button id="addWord">добавить слово</button>
+<ul id="spisok"></ul>
+      <script type="module" src="/src/third.ts"></script>
+    </div>
+
+
+   import './style.css';
+const addWord = document.getElementById('addWord') as HTMLButtonElement;
+const spisok = document.getElementById('spisok') as HTMLUListElement;
+const commonWords = ['добрый день', 'спасибо', 'пожалуйста', 'к сожалению']; // список часто употребляемых слов
+addWord.addEventListener('click', () => 
+//выводим слова на рнадоме
+{
+    const randomIndex = Math.floor(Math.random() * commonWords.length);
+    const word = commonWords[randomIndex];
+    //в список
+    const li = document.createElement('li');
+    li.textContent = word;
+    spisok.appendChild(li);//из текущей позиции в новую
+});

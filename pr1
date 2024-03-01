@@ -155,6 +155,106 @@ let addWordCountToList = (word: string, count: number, list: HTMLTextAreaElement
 
 
 3
+2
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app1">
+      <h1>task1</h1>
+      <!--Разработайте сценарий для веб-страницы, который формирует корзину выбранного посетителем товара.
+           У посетителя есть возможность добавить товар в корзину, удалить товар, выбрать валюту, 
+           просмотреть стоимость выбранного товара и общую стоимость покупки.-->
+      <h1>выберите товар</h1>
+      <select id="items">
+        <!-- <option value="phone">phone</option>
+        <option value="laptop">laptop</option>
+        <option value="tv">tv</option> -->
+      </select>
+  <div id="total">
+<span>Корзина</span>
+    <div id="cart">
+      <div id="list">
+
+      </div>
+    </div>
+  </div>
+  <select id="cash">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="RUB">RUB</option>
+  </select>
+  <br>
+  <button id="addBut">добавитьтовар</button><br>
+  <button onclick="del()">удалить товар</button><br>
+  <button onclick="totalSum()">посчитать итоговую сумму</button>
+
+    <script type="module" src="/src/second.ts"></script>
+
+  </body>
+</html>
+
+
+import './style.css'
+
+type Item =   {x:string, c:number};
+
+let mas:Item[]=[
+    {
+        x:"phone",
+        c:1200,
+      
+    },
+    {
+        x:"laptop",
+        c:5000,
+      
+    },
+    {
+        x:"tv",
+        c:10000,
+        
+    }
+]//массив вывода товаров
+mas.forEach(el => {
+    let container: HTMLSelectElement = <HTMLSelectElement>document.querySelector("#items");
+    container!.innerHTML +=`<option value='${el.x}'>${el.x}</option>`;//? null, ! эл точн есть, интерполяция переменных
+});
+let cart: Item[]=[];
+let addBut=document.querySelector('#addBut');
+addBut?.addEventListener("click", function()
+{
+   
+let select: HTMLSelectElement = <HTMLSelectElement>document.querySelector("#items");//вытаскиваю контейнер
+   cart.push(mas[select.selectedIndex]);
+   update()
+})
+
+
+function update() {
+
+    let list: HTMLDivElement = <HTMLDivElement>document.querySelector("#list");
+    list!.innerHTML = ""
+    cart.forEach(el => {
+        list!.innerHTML +=`<div><div>${el.x} ${el.c}</div><button class="delBtn" id='${cart.indexOf(el)}''</div>`;//? null, ! эл точн есть, интерполяция переменных
+    });
+
+}//обновление корзины плюс чистка
+
+let delBtn = document.querySelector('.delBtn')
+
+delBtn?.addEventListener('click', del)
+
+function del()
+{
+    console.log()
+}
+
 
 
   4

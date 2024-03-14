@@ -1,0 +1,27 @@
+import './style.css'
+import chunk from 'lodash-ts/chunk';
+import _arrayIncludes from 'lodash-ts/_arrayIncludes';
+import random from 'lodash-ts/random';
+import * as ss from 'simple-statistics';
+//1
+let mas=['foo', 'bar', 'fo1', 'ba1'];
+chunk(mas,2);
+console.log(chunk(mas,2));
+//2
+console.log(_arrayIncludes(mas,'foo'));
+console.log(_arrayIncludes(mas,'bar'));
+console.log(_arrayIncludes(mas,'fo1'));
+console.log(_arrayIncludes(mas,'ba1'));
+//3
+console.log(random(1,100));
+//4
+ss.factorial(random(1,100));
+console.log(ss.factorial(random(1,100)));
+//5
+let array=['foo', 'bar', 'fo1', 'ba1', 'f1o', 'b1a'];
+ss.shuffle(array);
+console.log(ss.shuffle(array));
+//6
+let ar=[1,2,3,4,5,6] ;
+ss.combinations(ar,2);
+console.log(ss.combinations(ar,2));

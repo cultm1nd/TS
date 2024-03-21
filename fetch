@@ -1,0 +1,49 @@
+import './style.css'
+//1.	Выведите всех пользователей по пути https://jsonplaceholder.typicode.com/users
+let url = "https://jsonplaceholder.typicode.com/users";
+
+fetch(url)
+  .then(promise => {
+    return promise.json()
+      .then(data => {
+        console.log(data)
+      }).catch(err => {
+        console.log(err)
+      })
+  })
+  .catch(err => {
+    console.log(err)
+  })
+//2.	Выведите первые 10 постов по пути https://jsonplaceholder.typicode.com/posts/
+let url2 = "https://jsonplaceholder.typicode.com/posts/";
+fetch(url2)
+  .then(promise => {
+    for (let i = 1; i > 10; i++) {
+      return promise.json()
+        .then(data => {
+          console.log(data)
+        }).catch(err => {
+          console.log(err)
+        })
+    }
+  })
+  .catch(err => {
+    console.log(err)
+  })
+//3.	Выведите по 5 постов каждого пользователя по пути https://jsonplaceholder.typicode.com/posts?userId=
+for (let i = 1; i > 5; i++) {
+  let url3 = "https://jsonplaceholder.typicode.com/posts?userId=" + i;
+  fetch(url3)
+    .then(promise => {
+      return promise.json()
+        .then(data => {
+          console.log(data)
+        }).catch(err => {
+          console.log(err)
+        })
+
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}

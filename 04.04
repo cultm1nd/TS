@@ -1,0 +1,72 @@
+import '../src/style.css'
+import axios from "axios";
+//вывод всех постов
+axios.get("http://127.0.0.1:8000/api/posts/all").then(res => {
+
+  const tableBody = document.getElementById('posts')!.querySelector('tbody');
+  let content = res.data
+  // let id=document.querySelector(".id");
+  // let content=document.querySelector(".content"); document.querySelector(".content");
+  // let likes=document.querySelector(".likes");document.querySelector(".likes");
+  // let createdAt=document.querySelector(".created_at"); document.querySelector(".created_at");
+  for (let i = 0; i < content.length; i++) {
+    let todo = content[i]
+    console.log(content[i])
+    // if (todo.completed) {
+
+    const row = tableBody!.insertRow();
+    row!.insertCell(0).textContent = todo.id;
+    row!.insertCell(1).textContent = todo.title;
+    row!.insertCell(2).textContent = todo.content;
+    row!.insertCell(3).textContent = todo.likes;
+    // }
+
+  }
+})
+  .catch(err => {
+    console.log(err);
+  })
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css">
+    <title>Vite + TS</title>
+  </head>
+  <body>
+<table id="posts">
+    <th>ID</th>
+    <th>TITLE</th>
+    <th>CONTENT</th>
+    <th>LIKES</th>
+  <td>
+     <tr class="id"></tr>
+     <tr class="title"></tr>
+     <tr class="content"></tr>
+     <tr class="likes"></tr>
+  </td>
+</table>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+
+
+
+*
+{
+  align-content: center;
+  text-align: center;
+}
+table {
+  background: rgb(255, 255, 255); /* Цвет фона таблицы */
+    border: 5px  rgb(46, 184, 46);
+ }
+ td,th{
+  padding: 5px; /* Поля вокруг текста */
+  border: 1px solid rgb(154, 151, 206); /* Рамка вокруг ячеек */
+  border-radius: 10px;
+ }

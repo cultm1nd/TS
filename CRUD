@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="table"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+
+
+import './style.css'
+import axios from "axios";
+
+document.querySelector<HTMLDivElement>('#table')!.innerHTML = `
+  <div>
+   <div>
+        <input type="number" class="postid" placeholder="ID post" />
+        <button class="idpoisk">Search</button>
+      </div>
+      <h2>All posts</h2>
+      <table id="postsTable" border="1"></table>
+      <br>
+      <br>
+      <div >
+        <input type="number" class="change" placeholder="ID post (for edit)" />
+        <button class="idChange">Edit</button>
+        <button id="add">Add post</button>
+       </div>
+  </div>
+`
+
+
+axios.get('http://127.0.0.1:8000/api/posts/all')
+  .then(res => {
+    const posts = res.data;
+    const table = document.getElementById('postsTable');
+    console.log(res.data)
+    const row = table.insertRow();
+
+    //theads
+    const Thead1 = row.insertCell(0);
+    const Thead2 = row.insertCell(1);
+    const Thead3 = row.insertCell(2);
+    const Thead4 = row.insertCell(3);
+
+    Thead1.innerHTML = "ID";
+    Thead2.innerHTML = "TITLE";
+    Thead3.innerHTML = "CONTENT";
+    Thead4.innerHTML = "DELETE";
+
+
+    //posts
+    posts.forEach(post => {
+      const row = table.insertRow();
+
+      const idCell = row.insertCell(0);
+      const titleCell = row.insertCell(1);
+      const bodyCell = row.insertCell(2);
+      const deleteCell = row.insertCell(3);
+
+      idCell.innerHTML = post.id;
+      titleCell.innerHTML = post.title;
+      bodyCell.innerHTML = post.content;
+      deleteCell.innerHTML = `<button id="${post.id}" style=' background-color:red'> Delete </button>`;
+
+
+      //delete
+      const delButton = document.getElementById(post.id);
+      delButton?.addEventListener('click', function handleClick(event) {
+        axios.delete(`http://127.0.0.1:8000/api/posts/delete/${post.id}`).then(res => {
+          console.log(res.data)
+          window.location.reload();
+        })
+          .catch(err => {
+            console.log(err);
+          })
+      });
+    });
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+
+function getId(id: number) {
+  const updateBtn = document.querySelector(`.${id}`);
+
+
+  updateBtn?.addEventListener('click', function hanvdleClick(event) {
+    const title: string = prompt("Title")!;
+    const content: string = prompt("Content")!;
+    update(title, content)
+  });
+}
+
+
+
+
+const addBut = document.getElementById("add");
+addBut?.addEventListener('click', function handleClick(event) {
+  const title: string = prompt("Title")!;
+  const content: string = prompt("Content")!;
+  add(title, content)
+});
+
+function add(titleGet: string, contentGet: string) {
+  axios.post(`http://127.0.0.1:8000/api/posts/new`, {
+    title: titleGet,
+    content: contentGet
+  })
+    .then(res => {
+      console.log(res.data);
+      window.location.reload();
+
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+}
+
+//search
+document.querySelector('.idpoisk')?.addEventListener('click', () => {
+  let id = document.querySelector('.postid') as HTMLInputElement
+  axios
+    .get(`http://127.0.0.1:8000/api/posts/${id.value}`)
+    .then(res => {
+      alert(`id = ${res.data.id} Title = ${res.data.title}  Content = ${res.data.content} `)
+    })
+    .catch(err => {
+      console.log(err)
+      alert('Undefined post')
+    })
+})
+
+
+document.querySelector('.idpoisk')?.addEventListener('click', () => {
+  let id = document.querySelector('.postid') as HTMLInputElement
+  axios
+    .get(`http://127.0.0.1:8000/api/posts/${id.value}`)
+    .then(res => {
+      alert(`id = ${res.data.id} Title = ${res.data.title}  Content = ${res.data.content} `)
+    })
+    .catch(err => {
+      console.log(err)
+      alert('Undefined post')
+    })
+})
+
+
+//edit
+document.querySelector('.idChange')?.addEventListener('click', () => {
+  let id = document.querySelector('.change') as HTMLInputElement
+
+  const titleGet: string = prompt("Title")!;
+  const contentGet: string = prompt("Content")!;
+
+  axios.put(`http://127.0.0.1:8000/api/posts/update/${id.value}`, {
+    title: titleGet,
+    content: contentGet
+  })
+    .then(res => {
+      console.log(res.data);
+      window.location.reload();
+
+    })
+    .catch(err => {
+      console.log(err);
+    });
+})
+
+
+
+
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff;
+}
+
+
+#table {
+  max-width: 1280px;
+  padding: 2rem;
+  text-align: center;
+}
+
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #00bc26;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
